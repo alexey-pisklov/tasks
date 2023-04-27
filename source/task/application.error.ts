@@ -1,4 +1,4 @@
-export class NotFoundError extends Error {
+export class ApplicationError extends Error {
   public error: string;
   public statusCode: number;
   public details: string[] | [];

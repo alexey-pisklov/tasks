@@ -1,7 +1,8 @@
 import {TaskRepository} from "../task.repository";
 import {TaskEntity} from "../entity/task.entity";
 import {v4 as uuid} from "uuid";
-import {NotFoundError} from "../not-found.error";
+import {ApplicationError} from "../application.error";
+
 
 export class InMemoryRepository implements TaskRepository {
 
@@ -20,7 +21,7 @@ export class InMemoryRepository implements TaskRepository {
 
   public async getById(id: string): Promise<TaskEntity> {
     if (this.tasks.has(id) === false) {
-      throw new NotFoundError(404, "x-404", "Not found",[`Cannot find task with id: ${id}`]);
+      throw new ApplicationError(404, "x-404", "Not found",[`Cannot find task with id: ${id}`]);
     }
     return this.tasks.get(id)!;
   }
@@ -31,13 +32,13 @@ export class InMemoryRepository implements TaskRepository {
       this.tasks.delete(task.id);
       return task;
     } else {
-      throw new NotFoundError(404, "x-404", "Not found",[`Cannot find task with id: ${id}`]);
+      throw new ApplicationError(404, "x-404", "Not found",[`Cannot find task with id: ${id}`]);
     }
   }
 
   public async save(task: TaskEntity): Promise<TaskEntity> {
     if (this.tasks.has(task.id) === false) {
-      throw new NotFoundError(404, "x-404", "Not found",[`Cannot find task with id: ${task.id}`]);
+      throw new ApplicationError(404, "x-404", "Not found",[`Cannot find task with id: ${task.id}`]);
     }
     this.tasks.set(task.id, task);
     return task;

@@ -6,8 +6,8 @@ import { attachController } from "./decorators";
 import {TaskController} from "./task/controllers/task.controller";
 import {TaskRepository} from "./task/task.repository";
 import {InMemoryRepository} from "./task/repositiories/in-memory.repository";
-import {NotFoundError} from "./task/not-found.error";
 import {ValidationError} from "class-validator";
+import {ApplicationError} from "./task/application.error";
 
 
 container.register("TaskRepository", {
@@ -20,7 +20,7 @@ app.use(express.json());
 attachController(app, container, [TaskController]);
 
 app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (error instanceof NotFoundError) {
+  if (error instanceof ApplicationError) {
     return res.status(error.statusCode).json({
       error: error.error,
       message: error.message,
